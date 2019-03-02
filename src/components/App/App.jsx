@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import AppHeader from '../AppHeader/AppHeader';
-import SearchPanel from '../SearchPanel/SearchPanel';
-import TodoList from '../TodoList/TodoList';
+import AppHeader from '../AppHeader';
+import SearchPanel from '../SearchPanel';
+import TodoList from '../TodoList';
+import ItemStatusFilter from '../ItemStatusFilter';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.scss';
-import ItemStatusFilter from '../ItemStatusFilter/ItemStatusFilter';
 
 class App extends Component {
     render() {
