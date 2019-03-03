@@ -35,11 +35,12 @@ class App extends Component {
 
     state = {
         todoDataArray: [
-            this.createTodoItem('Drink Coffee'),
             this.createTodoItem('Build React App'),
-            this.createTodoItem('Have a lunch'),
+            this.createTodoItem('Change profession'),
+            this.createTodoItem('Become a senior developer'),
         ],
-        searchItem: ''
+        searchItem: '',
+        filter: 'all'
     }
 
     handleDeleteItem = (id) => {
@@ -99,9 +100,27 @@ class App extends Component {
         this.setState({ searchItem });
     }
 
+    onFilter = (items, filter) => {
+        switch(filter) {
+            case 'all':
+                return items;
+            case 'active':
+                return items.filter(item => !item.isDone);
+            case 'done':
+                return items.filter(item => item.isDone);
+            default:
+                return items;
+        }
+    }
+
+    handleFilterChange = (filter) => {
+        this.setState({filter})
+    }
+
     render() {
-        const { todoDataArray, searchItem } = this.state;
-        const visibleItems = this.search(todoDataArray, searchItem);
+        const { todoDataArray, searchItem, filter } = this.state;
+        const visibleItems = this.onFilter(
+            this.search(todoDataArray, searchItem), filter);
         const doneCount = todoDataArray.filter(el => el.isDone).length;
         const todoCount = todoDataArray.length - doneCount;
         return (
@@ -109,7 +128,10 @@ class App extends Component {
                 <AppHeader todo={todoCount} done={doneCount} />
                 <div className="todo-app__panel d-flex">
                     <SearchPanel onSearchChange={this.handleSearchChange} />
-                    <ItemStatusFilter />
+                    <ItemStatusFilter
+                        onFilter={filter}
+                        onFilterChange={this.handleFilterChange}
+                    />
                 </div>
                 <TodoList
                     todoDataArray={visibleItems}

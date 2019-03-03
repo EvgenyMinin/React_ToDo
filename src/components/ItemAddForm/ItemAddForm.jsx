@@ -36,6 +36,7 @@ class AddNewItem extends Component {
                 />
                 <button
                     className="btn btn-outline-secondary"
+                    disabled={this.state.label==='' ? 'disabled' : ''}
                 >
                     Add
                 </button>
