@@ -3,7 +3,7 @@ import AppHeader from '../AppHeader';
 import SearchPanel from '../SearchPanel';
 import TodoList from '../TodoList';
 import ItemStatusFilter from '../ItemStatusFilter';
-import AddNewItem from '../AddNewItem/AddNewItem';
+import ItemAddForm from '../ItemAddForm';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.scss';
 
@@ -38,7 +38,8 @@ class App extends Component {
             this.createTodoItem('Drink Coffee'),
             this.createTodoItem('Build React App'),
             this.createTodoItem('Have a lunch'),
-        ]
+        ],
+        searchItem: ''
     }
 
     handleDeleteItem = (id) => {
@@ -83,24 +84,40 @@ class App extends Component {
         });
     }
 
+    search = (items, searchItem) => {
+        if (searchItem.length === 0) {
+            return items;
+        }
+        return items.filter((item) => {
+            return item.label
+                .toLowerCase()
+                .indexOf(searchItem.toLowerCase()) > -1;
+        });
+    }
+
+    handleSearchChange = (searchItem) => {
+        this.setState({ searchItem });
+    }
+
     render() {
-        const { todoDataArray } = this.state;
+        const { todoDataArray, searchItem } = this.state;
+        const visibleItems = this.search(todoDataArray, searchItem);
         const doneCount = todoDataArray.filter(el => el.isDone).length;
         const todoCount = todoDataArray.length - doneCount;
         return (
             <div className="todo-app">
                 <AppHeader todo={todoCount} done={doneCount} />
                 <div className="todo-app__panel d-flex">
-                    <SearchPanel />
+                    <SearchPanel onSearchChange={this.handleSearchChange} />
                     <ItemStatusFilter />
                 </div>
                 <TodoList
-                    todoDataArray={todoDataArray}
+                    todoDataArray={visibleItems}
                     onDeleted={this.handleDeleteItem}
                     onToggleDone={this.handleToggleDone}
                     onToggleImportant={this.handleToggleImportant}
                 />
-                <AddNewItem onAddItem={this.handleAddItem}/>
+                <ItemAddForm onAddItem={this.handleAddItem}/>
             </div>
                 
             
