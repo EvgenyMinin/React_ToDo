@@ -3,10 +3,13 @@ import AppHeader from '../AppHeader';
 import SearchPanel from '../SearchPanel';
 import TodoList from '../TodoList';
 import ItemStatusFilter from '../ItemStatusFilter';
+import AddNewItem from '../AddNewItem/AddNewItem';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.scss';
 
 class App extends Component {
+
+    maxId = 10;
 
     state = {
         todoDataArray: [
@@ -29,6 +32,23 @@ class App extends Component {
         })
     }
 
+    handleAddItem = (text) => {
+        const newItem = {
+            label: text,
+            important: false,
+            id: this.maxId++
+        };
+        this.setState(({todoDataArray}) => {
+            const newArray = [
+                ...todoDataArray,
+                newItem
+            ];
+            return {
+                todoDataArray: newArray
+            }
+        });
+    }
+
     render() {
         const {todoDataArray} = this.state;
         return (
@@ -42,6 +62,7 @@ class App extends Component {
                     todoDataArray={todoDataArray}
                     onDeleted={this.handleDeleteItem}
                 />
+                <AddNewItem onAddItem={this.handleAddItem}/>
             </div>
                 
             
